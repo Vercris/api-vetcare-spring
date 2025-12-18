@@ -23,10 +23,8 @@ public class Cart {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
-
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private List<CartItem> items;
 }
