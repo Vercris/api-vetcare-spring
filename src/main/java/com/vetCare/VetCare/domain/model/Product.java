@@ -5,6 +5,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -25,7 +26,7 @@ public class Product {
 
     private String name;
     private String description;
-    private Double price;
+    private BigDecimal price;
     private Integer stockQuantity;
 
     @Column(unique = true)
