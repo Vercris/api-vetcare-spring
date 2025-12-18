@@ -1,7 +1,8 @@
 package com.vetCare.VetCare.web.controller;
 
+import com.vetCare.VetCare.application.dto.request.UserRequestDto;
+import com.vetCare.VetCare.application.dto.response.UserResponseDto;
 import com.vetCare.VetCare.application.service.UserService;
-import com.vetCare.VetCare.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,17 +18,23 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> register(@RequestBody User user) {
-        return new ResponseEntity<>(userService.register(user), HttpStatus.CREATED);
+    public ResponseEntity<UserResponseDto> register(
+            @RequestBody UserRequestDto dto) {
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(userService.register(dto));
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> list() {
+    public ResponseEntity<List<UserResponseDto>> list() {
         return ResponseEntity.ok(userService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> findById(@PathVariable Long id) {
+    public ResponseEntity<UserResponseDto> findById(
+            @PathVariable Long id) {
+
         return ResponseEntity.ok(userService.findById(id));
     }
 
@@ -37,3 +44,4 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 }
+

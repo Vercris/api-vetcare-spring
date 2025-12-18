@@ -4,7 +4,9 @@ import com.vetCare.VetCare.application.dto.request.ProductRequestDto;
 import com.vetCare.VetCare.application.dto.response.ProductResponseDto;
 import com.vetCare.VetCare.domain.model.Category;
 import com.vetCare.VetCare.domain.model.Product;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProductMapper {
     public Product toEntity(ProductRequestDto dto, Category category) {
         Product product = new Product();

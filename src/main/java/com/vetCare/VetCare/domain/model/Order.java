@@ -6,6 +6,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,10 +32,10 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    private Double subtotal;
-    private Double tax;
-    private Double shippingCost;
-    private Double total;
+    private BigDecimal subtotal;
+    private BigDecimal tax;
+    private BigDecimal shippingCost;
+    private BigDecimal total;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

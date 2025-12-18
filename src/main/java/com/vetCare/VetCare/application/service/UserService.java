@@ -1,17 +1,20 @@
 package com.vetCare.VetCare.application.service;
 
-import com.vetCare.VetCare.domain.model.User;
+import com.vetCare.VetCare.application.dto.request.UserRequestDto;
+import com.vetCare.VetCare.application.dto.response.UserResponseDto;
 
 import java.util.List;
 
 public interface UserService {
-    User register(User user);
 
-    User findById(Long id);
+    UserResponseDto register(UserRequestDto dto);
 
-    User findByEmail(String email);
+    UserResponseDto findById(Long id);
 
-    List<User> findAll();
+    UserResponseDto findByEmail(String email);
+
+    List<UserResponseDto> findAll();
 
     void deactivate(Long id);
 }
+

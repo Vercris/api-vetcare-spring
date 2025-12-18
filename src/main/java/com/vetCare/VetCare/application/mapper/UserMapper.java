@@ -3,16 +3,20 @@ package com.vetCare.VetCare.application.mapper;
 import com.vetCare.VetCare.application.dto.request.UserRequestDto;
 import com.vetCare.VetCare.application.dto.response.UserResponseDto;
 import com.vetCare.VetCare.domain.model.User;
-import lombok.Data;
+import com.vetCare.VetCare.domain.model.enums.UserRole;
+import org.springframework.stereotype.Component;
 
-@Data
+@Component
 public class UserMapper {
+
     public User toEntity(UserRequestDto dto) {
         User user = new User();
         user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword());
+        user.setPassword(dto.getPassword()); // luego se encripta
         user.setName(dto.getName());
         user.setPhone(dto.getPhone());
+        user.setRole(UserRole.CUSTOMER);
+        user.setIsActive(true);
         return user;
     }
 
@@ -27,3 +31,4 @@ public class UserMapper {
         return dto;
     }
 }
+

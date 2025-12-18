@@ -1,13 +1,15 @@
 package com.vetCare.VetCare.application.service;
 
+import com.vetCare.VetCare.application.dto.request.OrderRequestDto;
+import com.vetCare.VetCare.application.dto.response.OrderResponseDto;
 import com.vetCare.VetCare.domain.model.Order;
 
 import java.util.List;
 
 public interface OrderService {
-    Order create(Order order);
+    OrderResponseDto create(OrderRequestDto dto);
 
-    List<Order> findByUser(Long userId);
+    List<OrderResponseDto> findByUser(Long userId);
 
-    Order findById(Long id);
+    OrderResponseDto findById(Long id);
 }

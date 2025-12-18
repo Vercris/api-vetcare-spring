@@ -1,31 +1,83 @@
 package com.vetCare.VetCare.application.service.impl;
 
+import com.vetCare.VetCare.application.dto.request.OrderRequestDto;
+import com.vetCare.VetCare.application.dto.response.OrderResponseDto;
+import com.vetCare.VetCare.application.mapper.OrderMapper;
 import com.vetCare.VetCare.application.service.OrderService;
 import com.vetCare.VetCare.domain.model.Order;
+import com.vetCare.VetCare.domain.model.OrderItem;
+import com.vetCare.VetCare.domain.model.Product;
+import com.vetCare.VetCare.domain.model.User;
 import com.vetCare.VetCare.domain.repository.OrderRepository;
+import com.vetCare.VetCare.domain.repository.ProductRepository;
+import com.vetCare.VetCare.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
+    private final OrderMapper orderMapper;
 
     @Override
-    public Order create(Order order) {
-        return orderRepository.save(order);
+    public OrderResponseDto create(OrderRequestDto dto) {
+
+        // 1️⃣ Obtener usuario
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // 2️⃣ Crear entidad Order desde DTO
+        Order order = orderMapper.toEntity(dto, user);
+
+        // 3️⃣ Calcular totales
+        BigDecimal subtotal = BigDecimal.ZERO;
+
+        for (OrderItem item : order.getItems()) {
+            Product product = productRepository.findById(item.getProduct().getId())
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+            item.setUnitPrice(product.getPrice());
+            item.setSubtotal(
+                    product.getPrice()
+                            .multiply(BigDecimal.valueOf(item.getQuantity()))
+            );
+
+            subtotal = subtotal.add(item.getSubtotal());
+        }
+
+        order.setSubtotal(subtotal);
+        order.setTax(subtotal.multiply(BigDecimal.valueOf(0.18))); // IGV
+        order.setShippingCost(BigDecimal.ZERO);
+        order.setTotal(order.getSubtotal().add(order.getTax()));
+
+        // 4️⃣ Guardar
+        Order saved = orderRepository.save(order);
+
+        // 5️⃣ Retornar DTO
+        return orderMapper.toDto(saved);
     }
 
     @Override
-    public List<Order> findByUser(Long userId) {
-        return orderRepository.findByUser_Id(userId);
+    public List<OrderResponseDto> findByUser(Long userId) {
+
+        return orderRepository.findByUser_Id(userId)
+                .stream()
+                .map(orderMapper::toDto)
+                .toList();
     }
 
     @Override
-    public Order findById(Long id) {
-        return orderRepository.findById(id)
+    public OrderResponseDto findById(Long id) {
+
+        Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Orden no encontrada"));
+
+        return orderMapper.toDto(order);
     }
 }
