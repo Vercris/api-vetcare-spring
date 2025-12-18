@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "order_items")
 @Getter
@@ -26,6 +28,6 @@ public class OrderItem {
     private Product product;
 
     private Integer quantity;
-    private Double unitPrice;
-    private Double subtotal;
+    private BigDecimal unitPrice;
+    private BigDecimal subtotal;
 }
