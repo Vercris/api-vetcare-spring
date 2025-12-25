@@ -14,3 +14,9 @@ spring:
         format_sql: true
 server:
   port: 8080
+
+security:
+  jwt:
+    secret-key: una_clave_super_secreta_y_segura_1234567890
+    expiration: 180000
+
