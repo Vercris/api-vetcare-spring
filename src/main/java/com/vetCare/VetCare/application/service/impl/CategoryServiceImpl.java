@@ -28,4 +28,29 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> findByType(CategoryType type) {
         return categoryRepository.findByType(type);
     }
+
+    @Override
+    public Category findById(Long id) {
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+    }
+
+    @Override
+    public Category update(Long id, Category categoryDetails) {
+        Category category = findById(id);
+        
+        category.setName(categoryDetails.getName());
+        category.setDescription(categoryDetails.getDescription());
+        category.setType(categoryDetails.getType());
+        
+        return categoryRepository.save(category);
+    }
+
+    @Override
+    public void delete(Long id) {
+        if (!categoryRepository.existsById(id)) {
+            throw new RuntimeException("Categoría no encontrada");
+        }
+        categoryRepository.deleteById(id);
+    }
 }

@@ -8,6 +8,7 @@ import com.vetCare.VetCare.domain.model.Order;
 import com.vetCare.VetCare.domain.model.OrderItem;
 import com.vetCare.VetCare.domain.model.Product;
 import com.vetCare.VetCare.domain.model.User;
+import com.vetCare.VetCare.domain.model.enums.OrderStatus;
 import com.vetCare.VetCare.domain.repository.OrderRepository;
 import com.vetCare.VetCare.domain.repository.ProductRepository;
 import com.vetCare.VetCare.domain.repository.UserRepository;
@@ -15,7 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -69,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findByUser_Id(userId)
                 .stream()
                 .map(orderMapper::toDto)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -79,5 +82,25 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new RuntimeException("Orden no encontrada"));
 
         return orderMapper.toDto(order);
+    }
+
+    @Override
+    public List<OrderResponseDto> findAll() {
+        return orderRepository.findAll()
+                .stream()
+                .map(orderMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public OrderResponseDto updateStatus(Long id, OrderStatus status) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Orden no encontrada"));
+
+        order.setStatus(status);
+        order.setUpdatedAt(LocalDateTime.now());
+
+        Order updated = orderRepository.save(order);
+        return orderMapper.toDto(updated);
     }
 }
