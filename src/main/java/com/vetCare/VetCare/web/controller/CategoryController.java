@@ -26,8 +26,24 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.findAll());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Category> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(categoryService.findById(id));
+    }
+
     @GetMapping("/type/{type}")
     public ResponseEntity<List<Category>> findByType(@PathVariable CategoryType type) {
         return ResponseEntity.ok(categoryService.findByType(type));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody Category category) {
+        return ResponseEntity.ok(categoryService.update(id, category));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        categoryService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

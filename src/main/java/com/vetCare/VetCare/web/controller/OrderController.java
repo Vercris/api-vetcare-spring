@@ -1,9 +1,9 @@
 package com.vetCare.VetCare.web.controller;
 
 import com.vetCare.VetCare.application.dto.request.OrderRequestDto;
+import com.vetCare.VetCare.application.dto.request.UpdateOrderStatusRequestDto;
 import com.vetCare.VetCare.application.dto.response.OrderResponseDto;
 import com.vetCare.VetCare.application.service.OrderService;
-import com.vetCare.VetCare.domain.model.Order;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,5 +39,17 @@ public class OrderController {
             @PathVariable Long userId) {
 
         return ResponseEntity.ok(orderService.findByUser(userId));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<OrderResponseDto>> findAll() {
+        return ResponseEntity.ok(orderService.findAll());
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<OrderResponseDto> updateStatus(
+            @PathVariable Long id,
+            @RequestBody UpdateOrderStatusRequestDto dto) {
+        return ResponseEntity.ok(orderService.updateStatus(id, dto.getStatus()));
     }
 }

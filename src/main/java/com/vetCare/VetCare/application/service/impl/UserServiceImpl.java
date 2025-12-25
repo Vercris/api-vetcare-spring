@@ -48,6 +48,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserResponseDto update(Long id, UserRequestDto dto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        user.setName(dto.getName());
+        user.setPhone(dto.getPhone());
+        // No actualizamos email ni password aquí por seguridad
+
+        User updated = userRepository.save(user);
+        return userMapper.toDto(updated);
+    }
+
+    @Override
     public void deactivate(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -55,5 +68,3 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 }
-
-
