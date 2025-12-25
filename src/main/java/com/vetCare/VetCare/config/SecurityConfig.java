@@ -12,11 +12,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 @Configuration
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.web.SecurityFilterChain;
-
-@Configuration
-@EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
@@ -47,13 +42,3 @@ public class SecurityConfig {
         return source;
     }
 }
-        http
-            .csrf(csrf -> csrf.disable()) // Desactiva CSRF para desarrollo
-            .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll() // Permite todas las peticiones sin autenticación
-            );
-
-        return http.build();
-    }
-}
-
