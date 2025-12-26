@@ -12,4 +12,10 @@ public interface CategoryService {
     List<Category> findAll();
 
     List<Category> findByType(CategoryType type);
+
+    Category findById(Long id);
+
+    Category update(Long id, Category category);
+
+    void delete(Long id);
 }

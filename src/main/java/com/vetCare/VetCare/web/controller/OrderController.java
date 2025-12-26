@@ -1,17 +1,13 @@
 package com.vetCare.VetCare.web.controller;
 
 import com.vetCare.VetCare.application.dto.request.OrderRequestDto;
+import com.vetCare.VetCare.application.dto.request.UpdateOrderStatusRequestDto;
 import com.vetCare.VetCare.application.dto.response.OrderResponseDto;
 import com.vetCare.VetCare.application.service.OrderService;
-import com.vetCare.VetCare.domain.model.Order;
-import com.vetCare.VetCare.domain.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-
 
 import java.util.List;
 
@@ -23,11 +19,12 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<OrderResponseDto> createOrder(
-            @RequestBody OrderRequestDto dto,
-            @AuthenticationPrincipal User user
-    ) {
-        return ResponseEntity.ok(orderService.createOrder(dto, user));
+    public ResponseEntity<OrderResponseDto> create(
+            @RequestBody OrderRequestDto dto) {
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(orderService.create(dto));
     }
 
     @GetMapping("/{id}")
@@ -39,18 +36,20 @@ public class OrderController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<OrderResponseDto>> findByUser(
-            @PathVariable User userId) {
+            @PathVariable Long userId) {
 
-        return ResponseEntity.ok(orderService.getOrdersByUser(userId));
+        return ResponseEntity.ok(orderService.findByUser(userId));
     }
 
-    @GetMapping("/my")
-    public ResponseEntity<List<OrderResponseDto>> getMyOrders(
-            @AuthenticationPrincipal User user) {
-
-        return ResponseEntity.ok(orderService.getOrdersByUser(user));
+    @GetMapping
+    public ResponseEntity<List<OrderResponseDto>> findAll() {
+        return ResponseEntity.ok(orderService.findAll());
     }
 
-
-
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<OrderResponseDto> updateStatus(
+            @PathVariable Long id,
+            @RequestBody UpdateOrderStatusRequestDto dto) {
+        return ResponseEntity.ok(orderService.updateStatus(id, dto.getStatus()));
+    }
 }

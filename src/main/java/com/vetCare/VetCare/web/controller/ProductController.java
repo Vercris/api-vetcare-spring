@@ -35,6 +35,11 @@ public class ProductController {
         return ResponseEntity.ok(productService.findById(id));
     }
 
+    @GetMapping
+    public ResponseEntity<List<ProductResponseDto>> findAll() {
+        return ResponseEntity.ok(productService.findAll());
+    }
+
     @GetMapping("/active")
     public ResponseEntity<List<ProductResponseDto>> listActive() {
         return ResponseEntity.ok(productService.listActive());
@@ -46,10 +51,6 @@ public class ProductController {
 
         return ResponseEntity.ok(productService.search(name));
     }
-    @GetMapping
-    public ResponseEntity<List<ProductResponseDto>> listAll() {
-        return ResponseEntity.ok(productService.findAll());
-    }
 
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponseDto> update(
@@ -57,10 +58,10 @@ public class ProductController {
             @RequestBody ProductRequestDto dto) {
         return ResponseEntity.ok(productService.update(id, dto));
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         productService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
-
