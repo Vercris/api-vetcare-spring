@@ -1,33 +1,21 @@
 package com.vetCare.VetCare.security;
 
-import com.vetCare.VetCare.domain.model.UserSecurity;
-import com.vetCare.VetCare.domain.repository.UserSecurityRepository;
+import com.vetCare.VetCare.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-    private final UserSecurityRepository userSecurityRepository;
+    private final UserRepository userRepository;
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserSecurity  userSecurity = userSecurityRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario: " + username + " no existe"));
-        return User.builder()
-                .username(userSecurity.getUsername())
-                .password(userSecurity.getPassword())
-                .authorities(userSecurity.getRoles()
-                        .stream()
-                        .map(r -> new SimpleGrantedAuthority("ROLE_"+r.getName()))
-                        .collect(Collectors.toSet()))
-                .build();
-
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        // Como nuestra entidad User implementa UserDetails, podemos devolverla directamente.
+        // Spring Security usará los métodos que sobreescribimos (getAuthorities, getPassword, etc.).
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario con email: " + email + " no encontrado."));
     }
 }

@@ -3,8 +3,9 @@ package com.vetCare.VetCare.application.mapper;
 import com.vetCare.VetCare.application.dto.request.UserRequestDto;
 import com.vetCare.VetCare.application.dto.response.UserResponseDto;
 import com.vetCare.VetCare.domain.model.User;
-import com.vetCare.VetCare.domain.model.enums.UserRole;
+import com.vetCare.VetCare.domain.model.Role;
 import org.springframework.stereotype.Component;
+import java.util.stream.Collectors;
 
 @Component
 public class UserMapper {
@@ -15,8 +16,6 @@ public class UserMapper {
         user.setPassword(dto.getPassword()); // luego se encripta
         user.setName(dto.getName());
         user.setPhone(dto.getPhone());
-        user.setRole(UserRole.CUSTOMER);
-        user.setIsActive(true);
         return user;
     }
 
@@ -26,7 +25,7 @@ public class UserMapper {
         dto.setEmail(user.getEmail());
         dto.setName(user.getName());
         dto.setPhone(user.getPhone());
-        dto.setRole(user.getRole());
+        dto.setRoles(user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
         dto.setIsActive(user.getIsActive());
         return dto;
     }

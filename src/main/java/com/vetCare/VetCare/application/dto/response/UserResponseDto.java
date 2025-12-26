@@ -1,7 +1,7 @@
 package com.vetCare.VetCare.application.dto.response;
 
-import com.vetCare.VetCare.domain.model.enums.UserRole;
 import lombok.Data;
+import java.util.Set;
 
 @Data
 public class UserResponseDto {
@@ -9,6 +9,6 @@ public class UserResponseDto {
     private String email;
     private String name;
     private String phone;
-    private UserRole role;
+    private Set<String> roles;
     private Boolean isActive;
 }
