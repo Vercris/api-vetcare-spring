@@ -18,5 +18,5 @@ server:
 security:
   jwt:
     secret-key: una_clave_super_secreta_y_segura_1234567890
-    expiration: 180000
-
+    expiration-minutes: 15 # 15 minutos
+    refresh-expiration-days: 7 # 7 días
