@@ -1,7 +1,7 @@
 package com.vetCare.VetCare.security;
 
-import com.coudevi.domain.model.UserSecurity;
-import com.coudevi.domain.repository.UserSecurityRepository;
+import com.vetCare.VetCare.domain.model.UserSecurity;
+import com.vetCare.VetCare.domain.repository.UserSecurityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

@@ -1,7 +1,7 @@
 package com.vetCare.VetCare.security.filters;
 
-import com.coudevi.security.CustomUserDetailsService;
-import com.coudevi.security.util.JwtUtil;
+import com.vetCare.VetCare.security.CustomUserDetailsService;
+import com.vetCare.VetCare.security.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
