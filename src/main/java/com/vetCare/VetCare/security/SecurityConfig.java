@@ -4,6 +4,7 @@ import com.vetCare.VetCare.security.filters.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,9 +26,23 @@ public class SecurityConfig {
         csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // Endpoints Públicos
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/vehiculo/**").hasRole("ADMIN")
-                        .requestMatchers("/api/reserva/**").hasRole("RECEPCIONISTA")
+                        // Permitir registro de usuarios
+                        .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+                        // Permitir ver productos, categorías y servicios
+                        .requestMatchers(HttpMethod.GET, "/api/products/**", "/api/categories/**", "/api/services/**").permitAll()
+                        // Permitir ver horarios disponibles
+                        .requestMatchers(HttpMethod.GET, "/api/schedules/available").permitAll()
+
+                        // Endpoints Protegidos por Rol
+                        // ADMIN: puede gestionar (crear, editar, borrar) y ver listados completos.
+                        .requestMatchers(HttpMethod.GET, "/api/users", "/api/orders").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/products", "/api/categories", "/api/services", "/api/schedules").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/products/**", "/api/categories/**", "/api/services/**", "/api/schedules/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/users/**", "/api/products/**", "/api/categories/**", "/api/services/**", "/api/schedules/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/orders/**/status").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
