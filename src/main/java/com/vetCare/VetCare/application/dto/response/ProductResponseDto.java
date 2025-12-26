@@ -12,4 +12,7 @@ public class ProductResponseDto {
     private BigDecimal price;
     private Integer stockQuantity;
     private String categoryName;
+    private String sku;
+    private String imageUrl;
+    private Boolean isActive;
 }

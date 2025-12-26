@@ -11,6 +11,7 @@ import com.vetCare.VetCare.domain.model.User;
 import com.vetCare.VetCare.domain.model.enums.OrderStatus;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +28,7 @@ public class OrderMapper {
         order.setUser(user);
         order.setStatus(OrderStatus.PENDING);
         order.setOrderNumber("ORD-" + System.currentTimeMillis());
+        order.setAddress(dto.getAddress()); // 👈 OBLIGATORIO
 
         List<OrderItem> items = dto.getItems()
                 .stream()
@@ -38,6 +40,8 @@ public class OrderMapper {
 
         return order;
     }
+
+
 
     private OrderItem toOrderItemEntity(OrderItemRequestDto dto) {
 

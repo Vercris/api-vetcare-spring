@@ -11,7 +11,13 @@ public interface ProductService {
 
     ProductResponseDto findById(Long id);
 
+    List<ProductResponseDto> findAll();
+
+    ProductResponseDto update(Long id, ProductRequestDto dto);
+
     List<ProductResponseDto> listActive();
 
     List<ProductResponseDto> search(String name);
+
+    void delete(Long id);
 }

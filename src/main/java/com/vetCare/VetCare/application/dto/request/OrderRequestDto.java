@@ -7,4 +7,5 @@ import java.util.List;
 public class OrderRequestDto {
     private Long userId;
     private List<OrderItemRequestDto> items;
+    private String address;
 }

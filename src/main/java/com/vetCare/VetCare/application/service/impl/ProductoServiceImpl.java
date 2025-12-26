@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +42,29 @@ public class ProductoServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductResponseDto> findAll() {
+        return productRepository.findAll().stream()
+                .map(productMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ProductResponseDto update(Long id, ProductRequestDto dto) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setPrice(dto.getPrice());
+        product.setStockQuantity(dto.getStockQuantity());
+        product.setSku(dto.getSku());
+        product.setImageUrl(dto.getImageUrl());
+
+        return productMapper.toDto(productRepository.save(product));
+
+    }
+
+    @Override
     public List<ProductResponseDto> listActive() {
         return productRepository.findByIsActiveTrue()
                 .stream()
@@ -54,5 +78,13 @@ public class ProductoServiceImpl implements ProductService {
                 .stream()
                 .map(productMapper::toDto)
                 .toList();
+    }
+
+    @Override
+    public void delete(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+        product.setIsActive(false); // borrado lógico
+        productRepository.save(product);
     }
 }

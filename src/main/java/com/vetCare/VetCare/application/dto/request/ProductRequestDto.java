@@ -12,4 +12,6 @@ public class ProductRequestDto {
     private BigDecimal price;
     private Integer stockQuantity;
     private Long categoryId;
+    private String imageUrl;
+    private String sku;
 }
