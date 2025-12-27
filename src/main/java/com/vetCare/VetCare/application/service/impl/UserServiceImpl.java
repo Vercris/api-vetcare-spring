@@ -5,10 +5,13 @@ import com.vetCare.VetCare.application.dto.response.UserResponseDto;
 import com.vetCare.VetCare.application.mapper.UserMapper;
 import com.vetCare.VetCare.application.service.UserService;
 import com.vetCare.VetCare.domain.model.User;
+import com.vetCare.VetCare.domain.model.enums.UserRole;
 import com.vetCare.VetCare.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -17,10 +20,18 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserResponseDto register(UserRequestDto dto) {
         User user = userMapper.toEntity(dto);
+        
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setRole(UserRole.CUSTOMER);
+        user.setIsActive(true);
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
+
         User saved = userRepository.save(user);
         return userMapper.toDto(saved);
     }
@@ -48,12 +59,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserResponseDto update(Long id, UserRequestDto dto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        user.setName(dto.getName());
+        user.setPhone(dto.getPhone());
+        user.setUpdatedAt(LocalDateTime.now());
+        // No actualizamos email ni password aquí por seguridad
+
+        User updated = userRepository.save(user);
+        return userMapper.toDto(updated);
+    }
+
+    @Override
     public void deactivate(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         user.setIsActive(false);
+        user.setUpdatedAt(LocalDateTime.now());
         userRepository.save(user);
     }
 }
-
-

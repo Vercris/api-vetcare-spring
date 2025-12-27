@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ScheduleRepository extends JpaRepository<Schedule,Long> {
-    List<Schedule> findByService_Id(Long serviceId);
-//Para Horarios por servicio
+public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
+    List<Schedule> findByServiceId(Long serviceId);
+    List<Schedule> findByIsAvailableTrue();
 }

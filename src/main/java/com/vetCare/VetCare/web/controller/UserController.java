@@ -6,6 +6,7 @@ import com.vetCare.VetCare.application.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<UserResponseDto> register(
             @RequestBody UserRequestDto dto) {
 
@@ -27,6 +28,7 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponseDto>> list() {
         return ResponseEntity.ok(userService.findAll());
     }
@@ -38,10 +40,16 @@ public class UserController {
         return ResponseEntity.ok(userService.findById(id));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponseDto> update(
+            @PathVariable Long id,
+            @RequestBody UserRequestDto dto) {
+        return ResponseEntity.ok(userService.update(id, dto));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deactivate(@PathVariable Long id) {
         userService.deactivate(id);
         return ResponseEntity.noContent().build();
     }
 }
-
