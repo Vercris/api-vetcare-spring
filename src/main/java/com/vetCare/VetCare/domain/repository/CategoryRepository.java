@@ -8,6 +8,4 @@ import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category,Long> {
     List<Category> findByType(CategoryType type);
-    //Categorias de Productos
-    //categorias de servicios
 }

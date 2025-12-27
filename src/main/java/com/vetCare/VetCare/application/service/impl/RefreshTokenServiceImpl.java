@@ -35,16 +35,13 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        // Busca si ya existe un token para este usuario
         return refreshTokenRepository.findByUser(user)
                 .map(token -> {
-                    // Si existe, actualízalo
                     token.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
                     token.setToken(UUID.randomUUID().toString());
                     return refreshTokenRepository.save(token);
                 })
                 .orElseGet(() -> {
-                    // Si no existe, crea uno nuevo
                     RefreshToken newRefreshToken = RefreshToken.builder()
                             .user(user)
                             .expiryDate(Instant.now().plusMillis(refreshTokenDurationMs))

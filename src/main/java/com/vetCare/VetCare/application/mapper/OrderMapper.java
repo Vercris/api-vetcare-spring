@@ -17,10 +17,6 @@ import java.util.stream.Collectors;
 @Component
 public class OrderMapper {
 
-    /* ===============================
-       DTO -> ENTITY
-       =============================== */
-
     public Order toEntity(OrderRequestDto dto, User user) {
 
         Order order = new Order();
@@ -50,10 +46,6 @@ public class OrderMapper {
 
         return item;
     }
-
-    /* ===============================
-       ENTITY -> DTO
-       =============================== */
 
     public OrderResponseDto toDto(Order order) {
 

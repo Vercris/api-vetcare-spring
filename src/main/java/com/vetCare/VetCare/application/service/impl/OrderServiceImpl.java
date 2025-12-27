@@ -31,14 +31,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponseDto create(OrderRequestDto dto) {
 
-        // 1️⃣ Obtener usuario
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        // 2️⃣ Crear entidad Order desde DTO
         Order order = orderMapper.toEntity(dto, user);
 
-        // 3️⃣ Calcular totales
         BigDecimal subtotal = BigDecimal.ZERO;
 
         for (OrderItem item : order.getItems()) {
@@ -55,14 +52,12 @@ public class OrderServiceImpl implements OrderService {
         }
 
         order.setSubtotal(subtotal);
-        order.setTax(subtotal.multiply(BigDecimal.valueOf(0.18))); // IGV
+        order.setTax(subtotal.multiply(BigDecimal.valueOf(0.18)));
         order.setShippingCost(BigDecimal.ZERO);
         order.setTotal(order.getSubtotal().add(order.getTax()));
 
-        // 4️⃣ Guardar
         Order saved = orderRepository.save(order);
 
-        // 5️⃣ Retornar DTO
         return orderMapper.toDto(saved);
     }
 

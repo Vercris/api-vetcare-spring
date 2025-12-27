@@ -12,7 +12,7 @@ public class UserMapper {
     public User toEntity(UserRequestDto dto) {
         User user = new User();
         user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword()); // luego se encripta
+        user.setPassword(dto.getPassword());
         user.setName(dto.getName());
         user.setPhone(dto.getPhone());
         user.setRole(UserRole.CUSTOMER);

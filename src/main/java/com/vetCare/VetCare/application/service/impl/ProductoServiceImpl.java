@@ -31,7 +31,6 @@ public class ProductoServiceImpl implements ProductService {
         }
 
         Product product = productMapper.toEntity(dto, category);
-        // Asegurar que isActive se establezca si no viene en el DTO o por defecto
         if (product.getIsActive() == null) {
             product.setIsActive(true);
         }

@@ -39,7 +39,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.setService(service);
         appointment.setAppointmentDateTime(dto.getAppointmentDateTime());
         appointment.setNotes(dto.getNotes());
-        appointment.setStatus(AppointmentStatus.SCHEDULED); // Estado inicial
+        appointment.setStatus(AppointmentStatus.SCHEDULED);
         appointment.setCreatedAt(LocalDateTime.now());
         appointment.setUpdatedAt(LocalDateTime.now());
 
